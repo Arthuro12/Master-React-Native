@@ -46,9 +46,12 @@ export default function App() {
         <Button title="Add Goal" onPress={addGoal} />
       </View>
       <View style={styles.goalsContainer}>
-        <Text>List of goals</Text>
         {goals.length > 0
-          ? goals.map((goal) => <Text key={goal}>{goal}</Text>)
+          ? goals.map((goal) => (
+              <View style={styles.goalItem} key={goal}>
+                <Text style={styles.goalText}>{goal}</Text>
+              </View>
+            ))
           : null}
       </View>
     </View>
@@ -93,5 +96,14 @@ const styles = StyleSheet.create({
   },
   goalsContainer: {
     flex: 5,
+  },
+  goalItem: {
+    margin: 8,
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: "#5e0acc",
+  },
+  goalText: {
+    color: "white",
   },
 });
