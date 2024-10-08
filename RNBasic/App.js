@@ -16,6 +16,14 @@ export default function App() {
     });
   }
 
+  function deleteGoalHandler(id) {
+    setGoals((prevState) => {
+      const currGoalIdx = prevState.findIndex((currGoal) => currGoal.id === id);
+      prevState.splice(currGoalIdx, 1);
+      return [...prevState];
+    });
+  }
+
   return (
     // <View style={styles.container}>
     //   <View>
@@ -39,23 +47,25 @@ export default function App() {
       <GoalInput onAddGoal={addGoal} />
       <View style={styles.goalsContainer}>
         <FlatList
+          keyboardShouldPersistTaps="always"
           alwaysBounceVertical={false}
           data={goals}
           renderItem={(itemData) => {
-            return <GoalItem goal={itemData} />;
+            return (
+              <GoalItem goal={itemData} onDeleteItem={deleteGoalHandler} />
+            );
           }}
           keyExtractor={(item, index) => {
             return item.id;
           }}
-        >
-          {/* {goals.length > 0
+        />
+        {/* {goals.length > 0
             ? goals.map((goal) => (
                 <View style={styles.goalItem} key={goal}>
                   <Text style={styles.goalText}>{goal}</Text>
                 </View>
               ))
             : null} */}
-        </FlatList>
       </View>
     </View>
   );
