@@ -62,7 +62,7 @@ export default function App() {
           alwaysBounceVertical={false}
           data={goals}
           renderItem={(itemData) => {
-            return <GoalItem />;
+            return <GoalItem goal={itemData} />;
           }}
           keyExtractor={(item, index) => {
             return item.id;
