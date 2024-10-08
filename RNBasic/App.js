@@ -11,9 +11,11 @@ export default function App() {
 
   function addGoal() {
     setGoals((prevState) => {
+      setEnteredGoal("");
       return [...prevState, enteredGoal];
     });
   }
+
   return (
     // <View style={styles.container}>
     //   <View>
@@ -46,9 +48,7 @@ export default function App() {
       <View style={styles.goalsContainer}>
         <Text>List of goals</Text>
         {goals.length > 0
-          ? goals.map((goal) => {
-              <Text>{goal}</Text>;
-            })
+          ? goals.map((goal) => <Text key={goal}>{goal}</Text>)
           : null}
       </View>
     </View>
