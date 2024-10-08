@@ -7,11 +7,14 @@ export default function GoalItem({ goal, onDeleteItem }) {
   }
 
   return (
-    <Pressable onPress={() => deleteGoal()}>
-      <View style={styles.goalItem}>
+    <View style={styles.goalItem}>
+      <Pressable
+        style={({ pressed }) => pressed && styles.pressedItem}
+        onPress={() => deleteGoal()}
+      >
         <Text style={styles.goalText}>{goal.item.text}</Text>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 }
 
@@ -24,5 +27,8 @@ const styles = StyleSheet.create({
   },
   goalText: {
     color: "white",
+  },
+  pressedItem: {
+    opacity: 0.5,
   },
 });
