@@ -4,6 +4,7 @@ import {
   Text,
   View,
   ScrollView,
+  FlatList,
   Button,
   TextInput,
 } from "react-native";
@@ -19,7 +20,10 @@ export default function App() {
   function addGoal() {
     setGoals((prevState) => {
       setEnteredGoal("");
-      return [...prevState, enteredGoal];
+      return [
+        ...prevState,
+        { text: enteredGoal, id: Math.random().toString() },
+      ];
     });
   }
 
@@ -53,15 +57,28 @@ export default function App() {
         <Button title="Add Goal" onPress={addGoal} />
       </View>
       <View style={styles.goalsContainer}>
-        <ScrollView alwaysBounceVertical={false}>
-          {goals.length > 0
+        <FlatList
+          alwaysBounceVertical={false}
+          data={goals}
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }}
+        >
+          {/* {goals.length > 0
             ? goals.map((goal) => (
                 <View style={styles.goalItem} key={goal}>
                   <Text style={styles.goalText}>{goal}</Text>
                 </View>
               ))
-            : null}
-        </ScrollView>
+            : null} */}
+        </FlatList>
       </View>
     </View>
   );
