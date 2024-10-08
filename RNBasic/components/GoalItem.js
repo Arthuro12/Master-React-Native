@@ -2,7 +2,6 @@ import { StyleSheet, View, Text, Pressable } from "react-native";
 
 export default function GoalItem({ goal, onDeleteItem }) {
   function deleteGoal() {
-    console.log(goal.item.text);
     onDeleteItem(goal.item.id);
   }
 

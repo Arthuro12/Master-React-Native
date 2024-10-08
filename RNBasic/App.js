@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
 
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
 
 export default function App() {
   const [goals, setGoals] = useState([]);
+  const [modalIsVisible, setModalIsVisible] = useState(false);
 
   function addGoal(enteredGoal) {
     setGoals((prevState) => {
@@ -22,6 +23,10 @@ export default function App() {
       prevState.splice(currGoalIdx, 1);
       return [...prevState];
     });
+  }
+
+  function startAddGoalHandler() {
+    setModalIsVisible(true);
   }
 
   return (
@@ -44,7 +49,12 @@ export default function App() {
     //   <Button title="Click me!" />
     // </View>
     <View style={styles.appContainer}>
-      <GoalInput onAddGoal={addGoal} />
+      <Button
+        title="Add New Goal"
+        color="#5e0acc"
+        onPress={startAddGoalHandler}
+      />
+      <GoalInput visible={modalIsVisible} onAddGoal={addGoal} />
       <View style={styles.goalsContainer}>
         <FlatList
           keyboardShouldPersistTaps="always"
