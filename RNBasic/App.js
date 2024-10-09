@@ -15,6 +15,7 @@ export default function App() {
         { text: enteredGoal, id: Math.random().toString() },
       ];
     });
+    setModalIsVisible(false);
   }
 
   function deleteGoalHandler(id) {
@@ -25,36 +26,26 @@ export default function App() {
     });
   }
 
+  function endAddGoalHandler() {
+    setModalIsVisible(false);
+  }
+
   function startAddGoalHandler() {
     setModalIsVisible(true);
   }
 
   return (
-    // <View style={styles.container}>
-    //   <View>
-    //     <Text style={styles.text}>Another piece of text</Text>
-    //   </View>
-    //   <Text
-    //     style={styles.text}
-    //     // style={{
-    //     //   margin: 16,
-    //     //   borderStyle: "solid",
-    //     //   borderColor: "red",
-    //     //   borderWidth: 2,
-    //     //   padding: 12,
-    //     // }}
-    //   >
-    //     Hello World!
-    //   </Text>
-    //   <Button title="Click me!" />
-    // </View>
     <View style={styles.appContainer}>
       <Button
         title="Add New Goal"
         color="#5e0acc"
         onPress={startAddGoalHandler}
       />
-      <GoalInput visible={modalIsVisible} onAddGoal={addGoal} />
+      <GoalInput
+        visible={modalIsVisible}
+        onAddGoal={addGoal}
+        onCloseAddGoalModal={endAddGoalHandler}
+      />
       <View style={styles.goalsContainer}>
         <FlatList
           keyboardShouldPersistTaps="always"
@@ -69,13 +60,6 @@ export default function App() {
             return item.id;
           }}
         />
-        {/* {goals.length > 0
-            ? goals.map((goal) => (
-                <View style={styles.goalItem} key={goal}>
-                  <Text style={styles.goalText}>{goal}</Text>
-                </View>
-              ))
-            : null} */}
       </View>
     </View>
   );
