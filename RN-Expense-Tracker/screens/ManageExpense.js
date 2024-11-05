@@ -1,7 +1,7 @@
 import { useLayoutEffect, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 
-import Button from "../components/UI/Button";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import IconButton from "../components/UI/IconButton";
 
 import { ExpensesContext } from "../store/expenses-context";
@@ -14,24 +14,19 @@ function ManageExpense({ route, navigation }) {
   const expenseId = route.params?.expenseId;
   const isEditing = Boolean(expenseId);
 
+  const selectedExpense = expenseId
+    ? expensesCtx.expenses.find((currExpense) => currExpense.id === expenseId)
+    : null;
+
   function handleCancelDelete() {
     navigation.goBack();
   }
 
-  function handleConfirmlDelete() {
+  function handleConfirm(expense) {
     if (isEditing) {
-      expensesCtx.updateExpense(expenseId, {
-        description: "A new shoes",
-        date: new Date("2024-10-31"),
-        amount: 74.99,
-      });
+      expensesCtx.updateExpense(expenseId, expense);
     } else {
-      expensesCtx.addExpense({
-        id: "e11",
-        description: "A test",
-        date: new Date("2024-11-01"),
-        amount: 77.99,
-      });
+      expensesCtx.addExpense(expense);
     }
     navigation.goBack();
   }
@@ -49,18 +44,12 @@ function ManageExpense({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.flexRow}>
-        <Button
-          style={styles.buttonConfigStyle}
-          mode="flat"
-          onPress={handleCancelDelete}
-        >
-          Cancel
-        </Button>
-        <Button style={styles.buttonConfigStyle} onPress={handleConfirmlDelete}>
-          {isEditing ? "Update" : "Add"}
-        </Button>
-      </View>
+      <ExpenseForm
+        defaultValue={selectedExpense}
+        submitButtonLabel={isEditing ? "Edit" : "Add"}
+        onCancel={handleCancelDelete}
+        onSubmit={handleConfirm}
+      />
       {isEditing && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -88,15 +77,15 @@ const styles = StyleSheet.create({
     borderTopColor: GLOBAL_STYLES.colors.primary200,
     alignItems: "center",
   },
-  flexRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonConfigStyle: {
-    minWidth: 120,
-    marginHorizontal: 8,
-  },
+  // flexRow: {
+  //   flexDirection: "row",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // buttonConfigStyle: {
+  //   minWidth: 120,
+  //   marginHorizontal: 8,
+  // },
 });
 
 export default ManageExpense;
