@@ -1,5 +1,5 @@
-import { Alert, StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { Alert, Button, StyleSheet, View, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import { useEffect } from "react";
@@ -47,11 +47,18 @@ export default function App() {
       const projectId =
         Constants?.expoConfig?.extra?.eas?.projectId ??
         Constants?.easConfig?.projectId;
-      console.log(Constants);
+      // console.log(Constants);
       const pushToken = await Notifications.getExpoPushTokenAsync({
         projectId,
       });
       console.log(pushToken);
+
+      if (Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "default",
+          importance: Notifications.AndroidImportance.DEFAULT
+        });
+      }
     }
 
     configurePushNotifications();
@@ -60,15 +67,15 @@ export default function App() {
   useEffect(() => {
     const subscription1 = Notifications.addNotificationReceivedListener(
       (notification) => {
-        console.log("Notification details: ", notification);
-        const userName = notification.request.content.data.userName;
-        console.log(userName);
+        // console.log("Notification details: ", notification);
+        // const userName = notification.request.content.data.userName;
+        // console.log(userName);
       }
     );
 
     const subscription2 = Notifications.addNotificationResponseReceivedListener(
       (response) => {
-        console.log("Notification response: ", response);
+        // console.log("Notification response: ", response);
       }
     );
 
@@ -95,11 +102,29 @@ export default function App() {
     });
   }
 
+  function handleSendPushNotification() {
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        to: "",
+        title: "Test - Sent from a device",
+        body: "This is a test!"
+      })
+    });
+  }
+
   return (
     <View style={styles.container}>
       <Button
         title="Schedule Notification"
         onPress={handleScheduleNotification}
+      />
+      <Button
+        title="Send Push  Notification"
+        onPress={handleSendPushNotification}
       />
       <StatusBar style="auto" />
     </View>

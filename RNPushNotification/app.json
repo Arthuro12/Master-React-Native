@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "RNPushNotification",
-    "slug": "RNPushNotification",
+    "slug": "rnpushnotification",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -34,6 +34,12 @@
           "enableBackgroundRemoteNotifications": false
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "be2591e4-1364-49b6-a36e-77f01ec12438"
+      }
+    },
+    "owner": "arthur-dje"
   }
 }
