@@ -1,6 +1,8 @@
-import { StatusBar } from "expo-status-bar";
+import { Alert, StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, View } from "react-native";
 import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+import { useEffect } from "react";
 
 async function requestPermissionsAsync() {
   return await Notifications.requestPermissionsAsync({
@@ -24,6 +26,58 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
+  useEffect(() => {
+    async function configurePushNotifications() {
+      const { status } = await Notifications.getPermissionsAsync();
+      let finalStatus = status;
+
+      if (finalStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== "granted") {
+        Alert.alert(
+          "Permission required",
+          "Push notifications need the appropriate permissions."
+        );
+        return;
+      }
+
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      console.log(Constants);
+      const pushToken = await Notifications.getExpoPushTokenAsync({
+        projectId,
+      });
+      console.log(pushToken);
+    }
+
+    configurePushNotifications();
+  }, []);
+
+  useEffect(() => {
+    const subscription1 = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("Notification details: ", notification);
+        const userName = notification.request.content.data.userName;
+        console.log(userName);
+      }
+    );
+
+    const subscription2 = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log("Notification response: ", response);
+      }
+    );
+
+    return () => {
+      subscription1.remove();
+      subscription2.remove();
+    };
+  }, []);
+
   requestPermissionsAsync();
 
   async function handleScheduleNotification() {
